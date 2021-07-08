@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Get username
+USER=$(grep $1 /etc/userdomains | head -n 1 | awk '{print $NF}')
+
+if [ -z "$USER" ]
+then
+ echo No such Contract or Domain
+else
+
+ # List Email accounts
+ MAILLIST=$(uapi --user=$USER Email list_pops include_wildcard=1 skip_main=1 | grep email | awk '{print $2}')
+
+ # Add filter
+ addfilter ()
+ {
+  uapi --user=$USER Email store_filter account=$mailaccount filtername=spamassassin action1=save dest1=/.spam part1=\$header_subject: match1=matches val1="^\\{Spam\\?\\}|^\\{Definitely Spam\\?\\}"
+ }
+
+ for mailaccount in $MAILLIST
+ do
+  addfilter
+ done
+fi
