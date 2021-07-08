@@ -1,6 +1,6 @@
 #!/bin/bash
-## 
-## by @makeme v.2021-07.08
+## Create filters for MailScanner
+## by @makeme v.2021-07-08
 #
 # Get username
 USER=$(grep $1 /etc/userdomains | head -n 1 | awk '{print $NF}')
